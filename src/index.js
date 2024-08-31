@@ -13,6 +13,11 @@ const app = express();
 
 app.use(express.json());
 
+// Default route for root path
+app.get('/', (req, res) => {
+  res.send('Server is up and running.');
+});
+
 app.use('/api/auth', authRoutes);
 app.use('/api/listings', listingRoutes);
 app.use('/api/maps', mapRoutes);
