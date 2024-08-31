@@ -19,6 +19,17 @@ export const registerUser = async (req, res) => {
   }
 };
 
+export const verifyToken = (req, res) => {
+  const token = req.cookies.token || '';
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+    res.status(200).json({ message: 'Token is valid', user: decoded });
+  });
+};
+
 // Login a user
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
