@@ -5,6 +5,7 @@ import User from '../models/user.js';
 // Register a new user
 export const registerUser = async (req, res) => {
   const { username, email, password } = req.body;
+
   try {
     // Check if user already exists
     const existingUser = await User.findOne({ email });
@@ -25,7 +26,7 @@ export const registerUser = async (req, res) => {
     // Save new user to the database
     await newUser.save();
 
-    // Respond with success
+    // Respond with success (no token generation here)
     res.status(201).json({ message: 'User registered successfully!' });
   } catch (error) {
     console.error('Error registering user:', error); // Log the full error
@@ -77,6 +78,10 @@ export const loginUser = async (req, res) => {
 
 // Logout a user
 export const logoutUser = (req, res) => {
-  res.clearCookie('token');
+  res.clearCookie('token', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production', // Ensure secure clear in production
+    sameSite: 'strict',
+  });
   res.status(200).json({ message: 'Logged out successfully' });
 };
