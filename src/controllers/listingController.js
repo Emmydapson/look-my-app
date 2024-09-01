@@ -1,15 +1,41 @@
 import Listing from '../models/listingModel.js';
+import multer from 'multer';
+import path from 'path';
+import Listing from '../models/listingModel.js';
+
+// Setup multer for file uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/'); // Specify the folder to save uploaded files
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname)); // Append timestamp to filename
+  },
+});
+const upload = multer({ storage });
 
 // Create a new listing
 export const createListing = async (req, res) => {
-  const { title, description, location, imageUrl } = req.body;
-  
-  if (!title || !description || !location || !imageUrl) {
+  const { title, description, location, website, googleNavigator, email, phone } = req.body;
+  const coverImage = req.file('coverImage'); // Use multer to access the uploaded file
+  const logo = req.file('logo');
+
+  if (!title || !description || !location || !coverImage || !logo) {
     return res.status(400).json({ error: 'All fields are required' });
   }
 
   try {
-    const newListing = new Listing({ title, description, location, imageUrl });
+    const newListing = new Listing({
+      title,
+      description,
+      location,
+      coverImage: coverImage.path, // Store file path in DB
+      logo: logo.path,
+      website,
+      googleNavigator,
+      email,
+      phone,
+    });
     await newListing.save();
     res.status(201).json(newListing);
   } catch (error) {

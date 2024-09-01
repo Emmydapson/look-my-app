@@ -4,9 +4,12 @@ const listingSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String, required: true },
   location: { type: String, required: true },
-  imageUrl: { type: String },
-});
+  coverImage: { type: String, required: true }, // Path to image
+  logo: { type: String, required: true }, // Path to logo
+  website: { type: String },
+  googleNavigator: { type: String },
+  email: { type: String },
+  phone: { type: String },
+}, { timestamps: true });
 
-const Listing = mongoose.model('Listing', listingSchema);
-
-export default Listing;
+export default mongoose.model('Listing', listingSchema);
