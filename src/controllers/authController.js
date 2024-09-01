@@ -38,10 +38,14 @@ export const registerUser = async (req, res) => {
 export const verifyToken = (req, res) => {
   const token = req.cookies.token;
 
-  if (!token) return res.status(401).json({ error: 'No token provided' });
+  if (!token) {
+    console.warn('No token provided in cookies'); // Log warning for missing token
+    return res.status(401).json({ error: 'No token provided' });
+  }
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
+      console.error('Token verification error:', err.message); // Log error if token verification fails
       return res.status(401).json({ error: 'Unauthorized' });
     }
     res.status(200).json({ message: 'Token is valid', user: decoded });
@@ -57,9 +61,12 @@ export const loginUser = async (req, res) => {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
+    // Generate JWT token
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: '1h',
     });
+
+    console.log('Generated token:', token); // Log the generated token
 
     // Set the token in an HttpOnly cookie
     res.cookie('token', token, {
@@ -84,4 +91,23 @@ export const logoutUser = (req, res) => {
     sameSite: 'strict',
   });
   res.status(200).json({ message: 'Logged out successfully' });
+};
+
+// Middleware to authenticate token from cookies
+export const authenticateToken = (req, res, next) => {
+  const token = req.cookies.token;
+
+  if (!token) {
+    console.warn('No token provided in cookies for authentication'); // Log warning for missing token
+    return res.status(401).json({ error: 'No token provided' });
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) {
+      console.error('Invalid token:', err.message); // Log error if token is invalid
+      return res.status(403).json({ error: 'Invalid token' });
+    }
+    req.user = user;
+    next();
+  });
 };
