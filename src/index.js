@@ -14,7 +14,7 @@ connectDB();
 const app = express();
 
 app.use(cors({
-  origin: 'http://your-frontend-domain.com', // Replace with your frontend's URL
+  origin: 'https://restaurant-admin-dashboard-ve23.vercel.app', // Replace with your frontend's URL
   credentials: true,  // Enable sending cookies
 }));
 
