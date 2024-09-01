@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import cors from 'cors';  // Import the CORS middleware
+import cors from 'cors';
+import cookieParser from 'cookie-parser';  // Import cookie-parser middleware
 import connectDB from './config/db.js';
 import authRoutes from './routes/authRoute.js';
 import listingRoutes from './routes/listingRoute.js';
@@ -12,10 +13,13 @@ connectDB();
 
 const app = express();
 
-// Use CORS middleware with default settings
-app.use(cors());
+app.use(cors({
+  origin: 'http://your-frontend-domain.com', // Replace with your frontend's URL
+  credentials: true,  // Enable sending cookies
+}));
 
 app.use(express.json());
+app.use(cookieParser());  // Use cookie-parser middleware
 
 // Default route for root path
 app.get('/', (req, res) => {

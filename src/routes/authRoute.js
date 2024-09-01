@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post('/register', registerUser);
 router.post('/login', loginUser);
-router.post('/logout', logoutUser); // Add this route
-router.post('/verify-token', verifyToken); // Add this route
+router.post('/logout', logoutUser);
+router.get('/verify-token', verifyToken); // Changed to GET for token verification
 
 export default router;

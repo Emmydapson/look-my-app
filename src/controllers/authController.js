@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs'
+import bcrypt from 'bcryptjs';
 import User from '../models/user.js';
 
 // Register a new user
@@ -19,8 +19,11 @@ export const registerUser = async (req, res) => {
   }
 };
 
+// Verify JWT token (useful for checking user authentication status)
 export const verifyToken = (req, res) => {
-  const token = req.cookies.token || '';
+  const token = req.cookies.token;
+
+  if (!token) return res.status(401).json({ error: 'No token provided' });
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
@@ -47,6 +50,7 @@ export const loginUser = async (req, res) => {
     res.cookie('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+      sameSite: 'strict', // Prevent CSRF
       maxAge: 3600000, // 1 hour
     });
 
