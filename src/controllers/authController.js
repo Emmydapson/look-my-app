@@ -6,16 +6,30 @@ import User from '../models/user.js';
 export const registerUser = async (req, res) => {
   const { username, email, password } = req.body;
   try {
+    // Check if user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ error: 'User already exists with this email' });
+    }
+
+    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create new user
     const newUser = new User({
       username,
       email,
       password: hashedPassword,
     });
+
+    // Save new user to the database
     await newUser.save();
+
+    // Respond with success
     res.status(201).json({ message: 'User registered successfully!' });
   } catch (error) {
-    res.status(500).json({ error: 'Server error' });
+    console.error('Error registering user:', error); // Log the full error
+    res.status(500).json({ error: 'Server error', details: error.message }); // Send more detailed error message
   }
 };
 
@@ -56,7 +70,8 @@ export const loginUser = async (req, res) => {
 
     res.status(200).json({ message: 'Logged in successfully' });
   } catch (error) {
-    res.status(500).json({ error: 'Server error' });
+    console.error('Error logging in user:', error); // Log the full error
+    res.status(500).json({ error: 'Server error', details: error.message }); // Send more detailed error message
   }
 };
 
