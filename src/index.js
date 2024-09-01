@@ -1,7 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import cookieParser from 'cookie-parser';
 import connectDB from './config/db.js';
 import authRoutes from './routes/authRoute.js';
 import listingRoutes from './routes/listingRoute.js';
@@ -16,11 +15,10 @@ const app = express();
 // Use CORS middleware to handle cross-origin requests
 app.use(cors({
   origin: 'https://restaurant-admin-dashboard-ve23.vercel.app', // Replace with your frontend's URL
-  credentials: true, // Enable sending cookies
+  credentials: true, // Enable sending credentials
 }));
 
 app.use(express.json());
-app.use(cookieParser()); // Use cookie-parser middleware
 
 // Default route for root path
 app.get('/', (req, res) => {
