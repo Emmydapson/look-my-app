@@ -1,15 +1,30 @@
+// routes/listingRoutes.js
 import express from 'express';
-import { createListing, getListings, getListingById, updateListing, deleteListing } from '../controllers/listingController.js';
-import multer from 'multer';
+import {
+  createListing,
+  getListings,
+  getListingById,
+  updateListing,
+  deleteListing,
+} from '../controllers/listingController.js';
 import { authenticateToken } from '../middleware/auth.js';
-const router = express.Router();
-const upload = multer({ dest: 'uploads/' }); // Adjust as needed
+import uploadFiles from '../middleware/uploadMiddleware.js'; // Import the upload middleware
 
-// Use upload middleware for file uploads
-router.post('/listings', authenticateToken, upload.fields([{ name: 'coverImage' }, { name: 'logo' }]), createListing);
+const router = express.Router();
+
+// Use upload middleware for file uploads when creating a listing
+router.post('/listings', authenticateToken, uploadFiles, createListing);
+
+// Get all listings with pagination
 router.get('/listings', authenticateToken, getListings);
-router.get('/listings/:id', authenticateToken,getListingById);
+
+// Get a single listing by ID
+router.get('/listings/:id', authenticateToken, getListingById);
+
+// Update a listing
 router.put('/listings/:id', authenticateToken, updateListing);
+
+// Delete a listing
 router.delete('/listings/:id', authenticateToken, deleteListing);
 
 export default router;
