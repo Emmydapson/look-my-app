@@ -1,4 +1,4 @@
-import Listing from '../models/listingModel.js';
+
 import multer from 'multer';
 import path from 'path';
 import Listing from '../models/listingModel.js';
@@ -17,8 +17,8 @@ const upload = multer({ storage });
 // Create a new listing
 export const createListing = async (req, res) => {
   const { title, description, location, website, googleNavigator, email, phone } = req.body;
-  const coverImage = req.file('coverImage'); // Use multer to access the uploaded file
-  const logo = req.file('logo');
+  const coverImage = req.files.coverImage[0]; // Use multer to access the uploaded file
+  const logo = req.files.logo[0];
 
   if (!title || !description || !location || !coverImage || !logo) {
     return res.status(400).json({ error: 'All fields are required' });
@@ -43,6 +43,7 @@ export const createListing = async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 };
+
 
 // Get all listings with pagination
 export const getListings = async (req, res) => {
@@ -81,11 +82,11 @@ export const getListingById = async (req, res) => {
 // Update a listing
 export const updateListing = async (req, res) => {
   const { id } = req.params;
-  const { title, description, location, imageUrl } = req.body;
+  const { title, description, location, coverImage, logo } = req.body;
   try {
     const updatedListing = await Listing.findByIdAndUpdate(
       id,
-      { title, description, location, imageUrl },
+      { title, description, location, coverImage, logo },
       { new: true }
     );
     if (!updatedListing) return res.status(404).json({ error: 'Listing not found' });
