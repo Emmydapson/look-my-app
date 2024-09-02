@@ -13,18 +13,18 @@ import uploadFiles from '../middleware/uploadMiddleware.js'; // Import the uploa
 const router = express.Router();
 
 // Use upload middleware for file uploads when creating a listing
-router.post('/listings', authenticateToken, uploadFiles, createListing);
+router.post('/', authenticateToken, uploadFiles, createListing);
 
 // Get all listings with pagination
-router.get('/listings', authenticateToken, getListings);
+router.get('/', authenticateToken, getListings);
 
 // Get a single listing by ID
-router.get('/listings/:id', authenticateToken, getListingById);
+router.get('/:id', authenticateToken, getListingById);
 
 // Update a listing
-router.put('/listings/:id', authenticateToken, updateListing);
+router.put('/:id', authenticateToken, updateListing);
 
 // Delete a listing
-router.delete('/listings/:id', authenticateToken, deleteListing);
+router.delete('/:id', authenticateToken, deleteListing);
 
 export default router;
