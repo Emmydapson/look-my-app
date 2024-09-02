@@ -7,6 +7,7 @@ const listingSchema = new mongoose.Schema({
   coverImage: { type: String, required: true }, // Path to image
   logo: { type: String, required: true }, // Path to logo
   website: { type: String },
+  address: {type: String},
   googleNavigator: { type: String },
   email: { type: String },
   phone: { type: String },

@@ -23,6 +23,7 @@ export const createListing = async (req, res) => {
       coverImage: coverImage.path, // Store file path in DB
       logo: logo.path,
       website,
+      address,
       googleNavigator,
       email,
       phone,
