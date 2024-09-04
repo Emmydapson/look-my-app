@@ -5,6 +5,7 @@ import Listing from '../models/listingModel.js';
 
 // Create a new listing
 export const createListing = async (req, res) => {
+  console.log('Uploaded Files:', req.files);
   const { title, description, location, website, googleNavigator, email, phone, address } = req.body; // Added address here
   
   // Access uploaded files using multer
@@ -31,7 +32,7 @@ export const createListing = async (req, res) => {
     await newListing.save();
     res.status(201).json(newListing);
   } catch (error) {
-    console.error(error);
+    console.error('Error during file upload:',error);
     res.status(500).json({ error: 'Server error' });
   }
 };

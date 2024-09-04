@@ -3,15 +3,18 @@ import { GOOGLE_MAPS_API_KEY } from '../config/apiConfig.js';
 
 // Fetch the Google Maps API Key
 export const getGoogleMapsApiKey = (req, res) => {
-    try {
-      res.json({ apiKey: GOOGLE_MAPS_API_KEY });
-    } catch (error) {
-      res.status(500).json({ error: 'Failed to retrieve API key' });
-    }
-  };
+  try {
+    res.json({ apiKey: GOOGLE_MAPS_API_KEY });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to retrieve API key' });
+  }
+};
+
 // Create a new map
 export const createMap = async (req, res) => {
-  const { city, imageUrl, description } = req.body;
+  const { city, description } = req.body;
+  const imageUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${encodeURIComponent(city)}&zoom=12&size=600x300&key=${GOOGLE_MAPS_API_KEY}`;
+
   try {
     const newMap = new Map({
       city,
@@ -50,7 +53,9 @@ export const getMapById = async (req, res) => {
 // Update a map
 export const updateMap = async (req, res) => {
   const { id } = req.params;
-  const { city, imageUrl, description } = req.body;
+  const { city, description } = req.body;
+  const imageUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${encodeURIComponent(city)}&zoom=12&size=600x300&key=${GOOGLE_MAPS_API_KEY}`;
+
   try {
     const updatedMap = await Map.findByIdAndUpdate(id, {
       city,
