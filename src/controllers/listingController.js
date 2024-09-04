@@ -5,7 +5,7 @@ import Listing from '../models/listingModel.js';
 
 // Create a new listing
 export const createListing = async (req, res) => {
-  const { title, description, location, website, googleNavigator, email, phone } = req.body;
+  const { title, description, location, website, googleNavigator, email, phone, address } = req.body; // Added address here
   
   // Access uploaded files using multer
   const coverImage = req.files.coverImage?.[0];
@@ -23,7 +23,7 @@ export const createListing = async (req, res) => {
       coverImage: coverImage.path, // Store file path in DB
       logo: logo.path,
       website,
-      address,
+      address, // Include address in the new listing
       googleNavigator,
       email,
       phone,
@@ -35,6 +35,7 @@ export const createListing = async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 };
+
 // Get all listings with pagination
 export const getListings = async (req, res) => {
   const { page = 1, limit = 10 } = req.query; // Default to page 1, 10 items per page
