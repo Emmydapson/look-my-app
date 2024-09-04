@@ -19,7 +19,7 @@ const app = express();
 
 // Use CORS middleware to handle cross-origin requests
 app.use(cors({
-  origin: 'https://restaurant-admin-dashboard-ve23.vercel.app', // Replace with your frontend's URL
+  origin: '*', // Replace with your frontend's URL
   credentials: true, // Enable sending credentials
 }));
 
