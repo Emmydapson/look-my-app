@@ -8,6 +8,7 @@ import mapRoutes from './routes/mapRoute.js';
 import categoryRoutes from './routes/categoryRoutes.js';
 import path from 'path';
 import { fileURLToPath } from 'url';  // Import fileURLToPath from 'url' module
+import contactRoutes from './routes/contactRoute.js';
 
 // Configure environment variables
 dotenv.config();
@@ -36,6 +37,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/listings', listingRoutes);
 app.use('/api/maps', mapRoutes);
 app.use('/api/categories', categoryRoutes);
+app.use('/api/contact', contactRoutes);
 
 // ES module replacement for __dirname
 const __filename = fileURLToPath(import.meta.url);
