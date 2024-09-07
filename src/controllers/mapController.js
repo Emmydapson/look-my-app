@@ -12,14 +12,16 @@ export const getGoogleMapsApiKey = (req, res) => {
 
 // Create a new map
 export const createMap = async (req, res) => {
-  const { city, description } = req.body;
-  const imageUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${encodeURIComponent(city)}&zoom=12&size=600x300&key=${GOOGLE_MAPS_API_KEY}`;
+  const { city, description, latitude, longitude } = req.body;
+  const imageUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=12&size=600x300&key=${GOOGLE_MAPS_API_KEY}`;
 
   try {
     const newMap = new Map({
       city,
       imageUrl,
       description,
+      latitude,
+      longitude,
     });
     await newMap.save();
     res.status(201).json(newMap);
@@ -50,24 +52,27 @@ export const getMapById = async (req, res) => {
   }
 };
 
-// Update a map
 export const updateMap = async (req, res) => {
   const { id } = req.params;
-  const { city, description } = req.body;
-  const imageUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${encodeURIComponent(city)}&zoom=12&size=600x300&key=${GOOGLE_MAPS_API_KEY}`;
+  const { city, description, latitude, longitude } = req.body;
+  const imageUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=12&size=600x300&key=${GOOGLE_MAPS_API_KEY}`;
 
   try {
     const updatedMap = await Map.findByIdAndUpdate(id, {
       city,
       imageUrl,
       description,
+      latitude,
+      longitude,
     }, { new: true });
+    
     if (!updatedMap) return res.status(404).json({ error: 'Map not found' });
     res.json(updatedMap);
   } catch (error) {
     res.status(500).json({ error: 'Failed to update map' });
   }
 };
+
 
 // Delete a map
 export const deleteMap = async (req, res) => {
