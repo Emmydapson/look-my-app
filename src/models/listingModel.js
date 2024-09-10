@@ -11,6 +11,8 @@ const listingSchema = new mongoose.Schema({
   googleNavigator: { type: String },
   email: { type: String },
   phone: { type: String },
+  latitude: { type: Number, required: true },  // Add latitude
+  longitude: { type: Number, required: true }, 
 }, { timestamps: true });
 
 export default mongoose.model('Listing', listingSchema);

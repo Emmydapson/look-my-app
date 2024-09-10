@@ -1,14 +1,12 @@
-
 import multer from 'multer';
 import path from 'path';
 import Listing from '../models/listingModel.js';
 
-// Create a new listing
+// Create a new listing (Admin)
 export const createListing = async (req, res) => {
   console.log('Uploaded Files:', req.files);
-  const { title, description, location, website, googleNavigator, email, phone, address } = req.body; // Added address here
+  const { title, description, location, website, googleNavigator, email, phone, address, latitude, longitude } = req.body;
   
-  // Access uploaded files using multer
   const coverImage = req.files.coverImage?.[0];
   const logo = req.files.logo?.[0];
 
@@ -21,25 +19,27 @@ export const createListing = async (req, res) => {
       title,
       description,
       location,
-      coverImage: coverImage.path, // Store file path in DB
+      coverImage: coverImage.path,
       logo: logo.path,
       website,
-      address, // Include address in the new listing
+      address,
       googleNavigator,
       email,
       phone,
+      latitude, 
+      longitude,
     });
     await newListing.save();
     res.status(201).json(newListing);
   } catch (error) {
-    console.error('Error during file upload:',error);
+    console.error('Error during file upload:', error);
     res.status(500).json({ error: 'Server error' });
   }
 };
 
-// Get all listings with pagination
+// Get all listings (Public)
 export const getListings = async (req, res) => {
-  const { page = 1, limit = 10 } = req.query; // Default to page 1, 10 items per page
+  const { page = 1, limit = 10 } = req.query;
   try {
     const listings = await Listing.find()
       .limit(limit * 1)
@@ -58,7 +58,7 @@ export const getListings = async (req, res) => {
   }
 };
 
-// Get a single listing
+// Get a single listing by ID (Public)
 export const getListingById = async (req, res) => {
   const { id } = req.params;
   try {
@@ -71,7 +71,7 @@ export const getListingById = async (req, res) => {
   }
 };
 
-// Update a listing
+// Update a listing (Admin)
 export const updateListing = async (req, res) => {
   const { id } = req.params;
   const { title, description, location, coverImage, logo } = req.body;
@@ -89,7 +89,7 @@ export const updateListing = async (req, res) => {
   }
 };
 
-// Delete a listing
+// Delete a listing (Admin)
 export const deleteListing = async (req, res) => {
   const { id } = req.params;
   try {

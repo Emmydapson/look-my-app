@@ -1,4 +1,3 @@
-// routes/listingRoutes.js
 import express from 'express';
 import {
   createListing,
@@ -12,19 +11,13 @@ import uploadFiles from '../middleware/uploadMiddleware.js'; // Import the uploa
 
 const router = express.Router();
 
-// Use upload middleware for file uploads when creating a listing
-router.post('/', authenticateToken, uploadFiles, createListing);
+// Public routes for mobile app to fetch listings
+router.get('/', getListings); // Fetch all listings (no auth)
+router.get('/:id', getListingById); // Fetch a specific listing (no auth)
 
-// Get all listings with pagination
-router.get('/',  getListings);
-
-// Get a single listing by ID
-router.get('/:id',  getListingById);
-
-// Update a listing
-router.put('/:id', authenticateToken, updateListing);
-
-// Delete a listing
-router.delete('/:id', authenticateToken, deleteListing);
+// Admin routes (protected)
+router.post('/', authenticateToken, uploadFiles, createListing); // Create a new listing
+router.put('/:id', authenticateToken, updateListing); // Update a listing
+router.delete('/:id', authenticateToken, deleteListing); // Delete a listing
 
 export default router;
