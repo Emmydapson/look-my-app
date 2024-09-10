@@ -16,10 +16,10 @@ const router = express.Router();
 router.post('/', authenticateToken, uploadFiles, createListing);
 
 // Get all listings with pagination
-router.get('/', authenticateToken, getListings);
+router.get('/',  getListings);
 
 // Get a single listing by ID
-router.get('/:id', authenticateToken, getListingById);
+router.get('/:id',  getListingById);
 
 // Update a listing
 router.put('/:id', authenticateToken, updateListing);
